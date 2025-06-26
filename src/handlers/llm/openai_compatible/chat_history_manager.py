@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import os
 import re
 from typing import Literal, Optional
 
@@ -26,9 +27,13 @@ def filter_text(text):
 
 
 class ChatHistory:
-    def __init__(self):
+    def __init__(self, session_id: Optional[str] = None, log_dir: str = "logs"):
         self.max_history_length = 20
         self.message_history = []
+        self.log_file = None
+        if session_id is not None:
+            os.makedirs(log_dir, exist_ok=True)
+            self.log_file = os.path.join(log_dir, f"{session_id}.txt")
 
     def add_message(self, message: HistoryMessage):
         history = self.message_history
@@ -36,6 +41,10 @@ class ChatHistory:
         # thread safe
         while len(history) >= self.max_history_length:
             history.pop(0)
+        if self.log_file:
+            role = message.role or "unknown"
+            with open(self.log_file, "a", encoding="utf-8") as f:
+                f.write(f"{role}: {message.content}\n")
 
     def generate_next_messages(self, chat_text, images):
         def history_to_message(history: HistoryMessage):
