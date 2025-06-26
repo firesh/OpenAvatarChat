@@ -38,7 +38,7 @@ class LLMContext(HandlerContext):
         self.input_texts = ""
         self.output_texts = ""
         self.current_image = None
-        self.history = ChatHistory()
+        self.history = ChatHistory(session_id)
         self.enable_video_input = False
 
 
