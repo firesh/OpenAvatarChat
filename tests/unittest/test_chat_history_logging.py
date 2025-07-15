@@ -1,6 +1,7 @@
 import os
 import unittest
 import tempfile
+from datetime import datetime
 from handlers.llm.openai_compatible.chat_history_manager import ChatHistory, HistoryMessage
 
 
@@ -11,7 +12,8 @@ class TestChatHistoryLogging(unittest.TestCase):
             history.add_message(HistoryMessage(role="human", content="hello"))
             history.add_message(HistoryMessage(role="avatar", content="hi"))
 
-            log_path = os.path.join(tmpdir, "test.txt")
+            prefix = datetime.now().strftime("%Y%m%d-")
+            log_path = os.path.join(tmpdir, f"{prefix}test.txt")
             with open(log_path, "r", encoding="utf-8") as f:
                 lines = f.read().splitlines()
 
