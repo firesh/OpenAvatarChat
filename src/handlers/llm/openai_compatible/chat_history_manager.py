@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 import os
 import re
+from datetime import datetime
 from typing import Literal, Optional
 
 
@@ -33,7 +34,8 @@ class ChatHistory:
         self.log_file = None
         if session_id is not None:
             os.makedirs(log_dir, exist_ok=True)
-            self.log_file = os.path.join(log_dir, f"{session_id}.txt")
+            date_prefix = datetime.now().strftime("%Y%m%d-")
+            self.log_file = os.path.join(log_dir, f"{date_prefix}{session_id}.txt")
 
     def add_message(self, message: HistoryMessage):
         history = self.message_history
